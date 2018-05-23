@@ -7,7 +7,7 @@ import './style.css';
 
 export default () => (
     <div className="view">
-        <ViewHeader />
+       
         <ViewContent />
     </div>
 );

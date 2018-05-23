@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
     AreaChart, Area,
     PieChart, Pie,
     XAxis, YAxis, CartesianGrid, Tooltip, Legend, Cell, Sector,
-    ResponsiveContainer
+    ResponsiveContainer,BarChart,Bar
 } from 'recharts';
 import {
     CardGroup, Card, CardBlock, CardTitle, Row, Button
@@ -22,6 +22,20 @@ import IconCardTravel from 'react-icons/lib/md/card-travel';
 // import IconDvr from 'react-icons/lib/md/dvr';
 // import IconBalance from 'react-icons/lib/md/account-balance';
 import IconDot from 'react-icons/lib/md/fiber-manual-record';
+
+/*Mapa Republica*/
+
+
+
+import ReactDOM from 'react-dom';
+import AmCharts from '@amcharts/amcharts3-react';
+
+import 'ammap3/ammap/ammap.js';
+import 'ammap3/ammap/maps/js/continentsLow.js';
+import 'ammap3/ammap/maps/js/san.js';
+import Mapa from'ammap3/ammap/maps/js/worldHigh.js';
+
+
 
 /*const TicketsMonth = ({data}) => (
     <ResponsiveContainer>
@@ -56,6 +70,103 @@ const TicketsTable = ({data}) => (
         </tbody>
     </table>
 );*/
+class ProspectsPer extends React.Component {
+
+    constructor(props) {
+
+        super(props);
+
+        this.state = {
+            data: [
+            {
+                "name":"Publicacion",
+                "Me Encanta":1000,
+                "Me Enoja":300,
+                "Me Entristece":10,
+                "Me Divierte":100,
+                "Me Asombra":35,
+                "Me Gusta":5000,
+
+            }
+
+            ],
+            lvl: 1,
+            title: "Reacciones por Publicacion ",
+        }; 
+
+        
+        this.iniciar = this.iniciar.bind(this);
+
+    }
+
+    componentDidMount() {
+
+        this.iniciar();
+   
+
+    }
+
+    iniciar()
+    {
+        // let self = this;
+
+        // api()
+        //     .get('api/dashboard/casillas_distrito/7')
+        //     .then(function(response)
+        //     {
+        //         if(response.status === 200)
+        //         {
+        //             self.setState({
+        //                 data: response.data,
+        //                 title: 'Casillas por Municipio'
+        //             });
+                       
+        //         }
+
+        //     })
+        //     .catch(function(error)
+        //     {
+            
+        //     });
+    }
+
+   
+
+    render() {
+
+        return(
+            <CardGroup className="sales-card mb-4">
+                <Card style={{'flex': '3 0 0'}}>
+                    <CardBlock>
+                        <CardTitle className="text-uppercase h6">{this.state.title}</CardTitle>
+                        <div className="small mb-4 card-subtitle"></div>
+                        <div style={{width: '100%', height: '280px'}}>
+                            <ResponsiveContainer>
+                                <BarChart width={730} height={250} data={this.state.data}>
+                                  <CartesianGrid strokeDasharray="3 3" />
+                                  <XAxis dataKey="name" />
+                                  <YAxis />                                  
+                                  <Tooltip/>                            
+                                   
+                                  <Legend />
+                                  <Bar dataKey="Me Gusta" fill='#0A22E0'  minPointSize={1} />
+                                   <Bar dataKey="Me Encanta" fill='#E00AB8'  minPointSize={1} />
+                                    <Bar dataKey="Me Enoja" fill='#E00A0A'  minPointSize={1} />
+                                   <Bar dataKey="Me Entristece" fill='#E0850A'  minPointSize={1} />
+                                    <Bar dataKey="Me Divierte" fill='#E0E00A'  minPointSize={1} />
+                                   <Bar dataKey="Me Asombra" fill='#31E00A'  minPointSize={1} />
+                                   
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+                    </CardBlock>
+                </Card>
+            </CardGroup>
+        );
+    }
+
+}
+
 
 export default class Content extends React.Component {
 
@@ -63,12 +174,65 @@ export default class Content extends React.Component {
         super(props);
 
         this.state = {
+            mapconfig: {
+                type: "map",
+                theme: "dark",
+                areasSettings: {
+                    autoZoom: true,
+                                   
+                    alpha: 0.8,
+                    unlistedAreasAlpha: 0.1,
+                    rollOverColor: "#9a7bca"
+                },
+                dataProvider: {
+                    "map": "mexicoLow",
+            "areas": [ 
+               
+            ]// fin de areas
+
+                },//fin del dataProvider
+                legend: {
+    "width": "100%",
+    "marginRight": 27,
+    "marginLeft": 27,
+    "equalWidths": false,
+    "backgroundAlpha": 1,
+    "backgroundColor": "#000000",
+    "borderColor": "#000000",
+    "color":"#ffffff",
+    "borderAlpha": 0.4,
+    "top": 463,
+    "left": 0,
+    "horizontalGap": 10,
+    "data": [ {
+      "title": "Likes",
+      "color": "#0A22E0"
+    }, {
+      "title": "Me Encanta",
+      "color": "#E00AB8"
+    }, {
+      "title": "Me Enoja",
+      "color": "#E00A0A"
+    } ,
+    {
+      "title": "Me Entristece",
+      "color": "#E0850A"
+    }, {
+      "title": "Me Divierte",
+      "color": "#E0E00A"
+    }, {
+      "title": "Me Asombra",
+      "color": "#31E00A"
+    }]
+  }//fin del legend
+            }//fin del mapconfig
            
-        };
+        };//fin del state
 
     }
 
     componentWillMount() {
+       
 
       /*  var self = this;
 
@@ -107,39 +271,44 @@ export default class Content extends React.Component {
 
     }
 
+
     render() {
-
+const style = {
+      width: '600px',
+      height: '400px'
+    };
         return(
-        <div className="view-content view-dashboard">
+            <div className="view ">
 
-            <CardGroup className="sales-card mb-4">
-            {/*    <Card style={{'flex': '3 0 0'}}>
-                    <CardBlock>
-                        <CardTitle className="text-uppercase h6">Tickets por Mes</CardTitle>
-                        <div className="small mb-4 card-subtitle">Total de tickets por mes</div>
-                        <div style={{width: '100%', height: '280px'}}>
-                           
-                        </div>
-                    </CardBlock>
-                </Card>
-               <Card>
-                    <CardBlock>
-                        <h6 className="text-uppercase title font-weight-bold small">Net Income</h6>
-                        <h4 className="font-weight-normal mb-0"><IconDollar size="16" color="#00c853"/>23,500</h4>
-                    </CardBlock>
-                    <CardBlock>
-                        <h6 className="text-uppercase title font-weight-bold small text-nowrap">Forecast Income</h6>
-                        <h4 className="font-weight-normal mb-0"><IconDollar size="16" color="#00c853"/>83,230</h4>
-                    </CardBlock>
-                    <CardBlock>
-                        <h6 className="text-uppercase title font-weight-bold small">Another yyy</h6>
-                        <h4 className="font-weight-normal mb-0"><IconTrendUp size="16" color="#00c853"/>21,32,520</h4>
-                    </CardBlock>
-                </Card>*/} 
-            </CardGroup>
+                <div className="view-header">
+                    <header className="title text-white">
+                        <h1 className="h4 text-uppercase">Dashboard</h1>
+                    </header>
+                </div>
+        <div className="view-content view-components mt-4 ">         
+        
+        <div className="row">
+         <div className="col-sm-8 fondo_oscuro_mapa">
+            <AmCharts.React
+                    ref="reactmap"
+                    style={{  width: "100%",  height: "500px"  }}
+                    options={this.state.mapconfig}
+                />   
+        </div>
+        <div className="col-sm-4 ">
+           <p> holis</p>
+        </div>
+        <div className="col-sm-8 ">
+             <ProspectsPer/>
+        </div>
+            
+        </div>
+                    
+         
 
             
 
+        </div>
         </div>
         )
     }
