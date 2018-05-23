@@ -1,9 +1,11 @@
 import React from 'react';
+
 import {
     LineChart, Line,
     BarChart, Bar,
     Tooltip
 } from 'recharts';
+
 
 let tinyChartData = [
     {day: '01', growth: 44, traffic: 1440},
@@ -12,7 +14,6 @@ let tinyChartData = [
     {day: '04', growth: 82, traffic: 2280},
     {day: '05', growth: 54, traffic: 4480}
 ];
-
 
 
 const IncomeGrowthTooltip = (props) => {
@@ -33,7 +34,7 @@ export default () => (
             <h1 className="h5 title text-uppercase">Dashboard</h1>
         </header>
         <div   className="ml-auto d-flex">
-           
+          
         </div>
     </div>
 );
