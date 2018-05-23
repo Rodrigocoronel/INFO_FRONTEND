@@ -178,8 +178,7 @@ export default class Content extends React.Component {
                 type: "map",
                 theme: "dark",
                 areasSettings: {
-                    autoZoom: true,
-                                   
+                    autoZoom: false,                                   
                     alpha: 0.8,
                     unlistedAreasAlpha: 0.1,
                     rollOverColor: "#9a7bca"
@@ -187,6 +186,47 @@ export default class Content extends React.Component {
                 dataProvider: {
                     "map": "mexicoLow",
             "areas": [ 
+             {
+          "id":"Layer_7",
+          
+          "color": "#0A22E0",
+
+        },
+        {
+          "id":"Layer_8",
+          
+           "color": "#0A22E0"
+
+        },
+        {
+          "id":"Layer_6",          
+          "color": "#0A22E0",
+
+        },
+        {
+          "id":"Layer_5",
+       
+           "color": "#0A22E0"
+
+        },
+         {
+          "id":"Layer_4",
+       
+           "color": "#0A22E0"
+
+        },
+        {
+          "id":"Layer_3",
+          
+          "color": "#0A22E0",
+
+        },
+        {
+          "id":"Layer_2",
+         
+           "color": "#0A22E0"
+
+        }
                
             ]// fin de areas
 
