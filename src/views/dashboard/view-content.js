@@ -9,19 +9,25 @@ import {
     CardGroup, Card, CardBlock, CardTitle, Row, Button
 } from 'reactstrap';
 
+import ReactTable from "react-table";
+import "react-table/react-table.css";
+
 import {Link} from 'react-router-dom';
 import {api} from '../../actions/_request.js';
+
+import Select from 'react-select';
+import 'react-select/dist/react-select.css';
 
 // icons
 import IconDollar from 'react-icons/lib/fa/dollar';
 import IconTrendUp from 'react-icons/lib/md/trending-up';
-// import IconLevelUp from 'react-icons/lib/fa/level-up';
-// import IconLevelDown from 'react-icons/lib/fa/level-down';
-// import IconAndroid from 'react-icons/lib/fa/android';
 import IconCardTravel from 'react-icons/lib/md/card-travel';
-// import IconDvr from 'react-icons/lib/md/dvr';
-// import IconBalance from 'react-icons/lib/md/account-balance';
 import IconDot from 'react-icons/lib/md/fiber-manual-record';
+import IconEdit from 'react-icons/lib/md/edit';
+
+import Map from '../../components/maps';
+
+import axios from 'axios';
 
 /*Mapa Republica*/
 
@@ -35,41 +41,16 @@ import 'ammap3/ammap/maps/js/continentsLow.js';
 import 'ammap3/ammap/maps/js/san.js';
 import Mapa from'ammap3/ammap/maps/js/worldHigh.js';
 
-
-
-/*const TicketsMonth = ({data}) => (
-    <ResponsiveContainer>
-        <AreaChart data={data} margin={{top: 10, right: 10, left: -15, bottom: 0}}>
-            <XAxis dataKey="month" axisLine={false} fontSize={10} tickLine={false} padding={{left: 0, right: 5}}/>
-            <YAxis fontSize={10} axisLine={false} tickLine={false}/>
-            <CartesianGrid stroke="#eee" vertical={false}/>
-            <Tooltip wrapperStyle={{borderColor: '#eee'}}/>
-            <Legend />
-            <Area type='monotone' dataKey='total' stackId="1" strokeWidth={2} stroke="#448AFF" fill='#448AFF' fillOpacity=".8"/>
-        </AreaChart>
-    </ResponsiveContainer>
-);
-
-const TicketsTable = ({data}) => (
-    <table className="table">
-
-        <tbody>
-            {data.map((item, i) => <tr key={i}>
-                <td className="d-flex flex-column">
-                    <strong>{item.No}</strong>
-                    <small>{item.Fecha}</small>
-                </td>
-                <td className="align-middle">{item.cliente}</td>
-                <td className="align-middle text-nowrap">
-                    <IconDot size="12" color={item.estatus === 'Inicial' ? '#00c853'
-                                              : item.estatus === 'Proceso' ? '#ffbf00'
-                                              : item.estatus === 'Finalizado' ? '#2962ff'
-                                              : '#ff1f1f'}/>&nbsp;{item.estatus}
-                </td>
-            </tr>)}
-        </tbody>
-    </table>
-);*/
+const paginas=
+            [           
+            { value:"1",label:"Viancca Barreto"},
+            { value:"2",label:"Celestino Salcedo Flores"},
+            { value:"3",label:"Mario Madrigal"},
+            { value:"4",label:"Adriana Lopez Quintero"},
+            { value:"5",label:"Erika Santana"},
+            { value:"6",label:"Génesis Márquez Rubalcava"},
+            { value:"7",label:"Lauro Aréstegui"}
+            ];
 class ProspectsPer extends React.Component {
 
     constructor(props) {
@@ -88,16 +69,6 @@ class ProspectsPer extends React.Component {
                 "Me Gusta":5000,
 
             },
-            ],
-            paginas:
-            [           
-            { value:"1627463167374165",label:"Viancca Barreto"},
-            { value:"1670414819732611",label:"Celestino Salcedo Flores"},
-            { value:"411052376013391",label:"Mario Madrigal"},
-            { value:"1277594875598974",label:"Adriana Lopez Quintero"},
-            { value:"496428537221963",label:"Erika Santana"},
-            { value:"351741994978553",label:"Génesis Márquez Rubalcava"},
-            { value:"242601132597540",label:"Lauro Aréstegui"}
             ],
             publicaciones:
             [
@@ -119,6 +90,8 @@ class ProspectsPer extends React.Component {
    
 
     }
+
+
 
     iniciar()
     {
@@ -188,6 +161,13 @@ export default class Content extends React.Component {
         super(props);
 
         this.state = {
+            long : -117.043863,
+            lat : 32.493699,
+            zoom : 13,
+            paginas:{
+                pag_id : '', 
+            },
+            pagina : [],
             mapconfig: {
                 type: "map",
                 theme: "dark",
@@ -280,71 +260,206 @@ export default class Content extends React.Component {
     }]
   }//fin del legend
             }//fin del mapconfig
-           
+        
+        
         };//fin del state
-
+        this.handleSelectChange = this.handleSelectChange.bind(this);
     }
 
-    componentWillMount() {
-       
+    // componentDidMount() {
 
+    //     let urlfb = 'https://graph.facebook.com/v3.0/me';
+    //     let token = 'EAACEdEose0cBAOsZAbl3jZCIRgV7mNR4Manz1oOE6zFZAABCQGD8AEhBcGC55KTscW7Rl5i53H0ESWKOth2NOyLJu3EhNh0qxXRYImevvPefn7QREvaXnfgj8g7jcttCvnOJQ3FX0y1ZCqZBHzEddsZCG8NDHXEr5vZBH1u9iGDAAnz4JjNfkT1086WUZC9ppLXhHZCeqJ5jt2QZDZD';
+    //     let consulta = '?fields=accounts%7Bname%2Caccess_token%7D&access_token=';
+    //     let paginas = [];
+    //     axios.get(urlfb+consulta+token)
+    //     .then(response => {
+    //          response.data.accounts.data.some(function(obj) {
+
+    //                 console.log(obj)
+    //                 paginas.push({
+                        
+    //                     value : obj.id,
+    //                     label : obj.name,
+    //                     token : obj.access_token,
+
+
+    //                 });
+                                     
+    //             });
+
+    //         });      
     
 
+    // }
+
+    handleSelectChange(select, name) {
+
+        const value = select === null ? null : select.value;
+
+        this.setState({
+            paginas: {
+                ...this.state.paginas,
+                [name]: value
+            }
+        });
+        console.log(value)
+        switch(value){
+            case "1":
+                this.setState({
+                    lat : 32.493699,
+                    long : -116.959654,
+                    zoom : 12,
+                });
+            break;
+
+            case "2":
+                this.setState({
+                    lat : 32.619812,
+                    long : -115.456473,
+                    zoom : 12
+                });
+                console.log(this.state.lat)
+                console.log(this.state.long)
+            break; 
+            case "3":
+                this.setState({
+                    lat : 32.461746,
+                    long : -117.043863,
+                    zoom : 12
+                });
+            break;
+
+            case "4":
+                this.setState({
+                    lat : 32.155425,
+                    long : -116.133693,
+                    zoom : 8
+                });
+            break;
+            case '5':
+                this.setState({
+                    lat : 32.493699,
+                    long : -116.959654,
+                    zoom : 12,
+                });
+
+            break;
+
+            case '6':
+                this.setState({
+                    lat : 31.865930,
+                    long : -116.597069,
+                    zoom : 13
+                });
+            break;
+
+            case '7':
+                this.setState({
+                    lat : 32.619812,
+                    long : -115.456473,
+                    zoom : 12
+                });
+            break;
+        }
+
+
+
     }
 
-
+// <div className="col-sm-8 fondo_oscuro_mapa">
+//                         <AmCharts.React
+//                                 ref="reactmap"
+//                                 style={{  width: "100%",  height: "500px"  }}
+//                                 options={this.state.mapconfig}
+//                             />   
+//                     </div>
     render() {
-const style = {
-      width: '600px',
-      height: '400px'
-    };
+        const style = {
+          width: '600px',
+          height: '400px'
+        };
+        console.log('nuevas')
+        console.log(this.state.lat)
+        console.log(this.state.long)
+
         return(
             <div className="view ">
-
                 <div className="view-header">
                     <header className="title text-white">
                         <h1 className="h4 text-uppercase">Dashboard</h1>
                     </header>
                 </div>
-        <div className="view-content view-components mt-4 ">         
-        
-        <div className="row">
-         <div className="col-sm-8 fondo_oscuro_mapa">
-            <AmCharts.React
-                    ref="reactmap"
-                    style={{  width: "100%",  height: "500px"  }}
-                    options={this.state.mapconfig}
-                />   
-        </div>
-        <div className="col-sm-4 ">
-            <div className="row">
-                        <div className="col-md-6">
-                                                    <div className="form-group">
-                                                        <label className>Departamento:</label>
-                                                        <Select
-                                                            placeholder=""
-                                                            type="text"
-                                                            name="departamento_id"
-                                                            options={this.state.paginas}
-                                                            value={parseInt(this.state.pagina_id)}
-                                                            onChange={ this.handleChangeDepartamento} 
-                                                            clearable={false}
-                                                        />
+                <div className="view-content view-components mt-4 ">         
+                   
+                <div className="row">
+                    <div className="col-sm-4 ">
+                        <div className="row">
+                            <div className="col-md-12">
+                                <div className="form-group">
+                                    <label >Publicaciones:</label>
+                                    <Select
+                                        placeholder=""
+                                        type="text"
+                                        name="pag_id"
+                                        options={paginas}
+                                        value={this.state.paginas.pag_id}
+                                        onChange={ (select) => { this.handleSelectChange(select, 'pag_id') } } 
+                                        clearable={false}
+                                    />
+                                    <br/><br/>
+                                    <ReactTable
+                                      data      = {[]}
+                                      className = "-striped -highlight"
+                                      columns   = {[
+                                       
+                                        {Header: 'Publicacion', accessor: 'label' , maxWidth: 220},
+                                        {
+                                            Header: 'Controles',
+                                            filterable: false,
+                                            sortable: false,
+                                            maxWidth: 80,
+                                            Cell: (row) =>
+                                            {
+                                                return(
+                                                    <div className="text-right">
+                                                        <Button
+                                                         color="success" 
+                                                         className="btn-sm" 
+                                                         onClick={(evt)=>this.toggle(evt, row.original.value, 'Editar Cliente')}>
+                                                            <IconEdit />
+                                                        </Button>{' '}
+                                                         
                                                     </div>
-                                                </div>
-                                                </div>
-        </div>
-        <div className="col-sm-8 ">
-             <ProspectsPer/>
-        </div>
-            
-        </div>
-                    
-         
+                                                )
+                                            }
+                                        }
+                                      
+                                      ]}
+                                      filterable 
+                                      defaultPageSize={5}
+                                      pageSizeOptions={[5]}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="col-sm-8">
+                        <Map lat={this.state.lat} long={this.state.long} zoom={this.state.zoom}/>
+                    </div>
+                     
+                </div>
+                <br/><br/>
+                <div className="row">
+                    <div className="col-4"></div>
 
-            
-
-        </div>
+                    <div className="col-8">
+                        <div className="push-right">
+                            <ProspectsPer/>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         )
     }
