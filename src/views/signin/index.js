@@ -4,7 +4,7 @@ import { Redirect } from "react-router-dom";
 
 import * as actions from '../../actions/auth';
 
-import loginbackground from '../../images/loginbackground.jpg';
+import loginbackground from '../../images/check.png';
 
 class SignIn extends React.Component {
 
@@ -23,7 +23,7 @@ class SignIn extends React.Component {
 
     componentDidMount()
     {
-        this.props.checktoken();
+        //this.props.checktoken();
     }
 	_submit(event) {
 

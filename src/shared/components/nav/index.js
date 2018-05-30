@@ -21,7 +21,7 @@ const NavHead = (props) => (
     <header className="nav-head">
         <NavLink to="/">
             <figure className="figure-140">
-                <img src={logo} alt="Maxicomm" />
+                <strong>Info-fb</strong>
             </figure>
         </NavLink>
         {/*<div className={`toggle-dot ${props.mini ? 'active': ''}`} onClick={props.toggleNav}></div>*/}

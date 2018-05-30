@@ -31,7 +31,7 @@ class App extends React.Component {
         let { authenticated } = this.props.auth;
 
         if(authenticated) {
-            this.props.whoiam();
+          //  this.props.whoiam();
         }
     }
 
