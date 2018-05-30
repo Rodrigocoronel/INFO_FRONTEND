@@ -87,11 +87,25 @@ class ProspectsPer extends React.Component {
                 "Me Asombra":35,
                 "Me Gusta":5000,
 
-            }
+            },
+            ],
+            paginas:
+            [           
+            { value:"1627463167374165",label:"Viancca Barreto"},
+            { value:"1670414819732611",label:"Celestino Salcedo Flores"},
+            { value:"411052376013391",label:"Mario Madrigal"},
+            { value:"1277594875598974",label:"Adriana Lopez Quintero"},
+            { value:"496428537221963",label:"Erika Santana"},
+            { value:"351741994978553",label:"Génesis Márquez Rubalcava"},
+            { value:"242601132597540",label:"Lauro Aréstegui"}
+            ],
+            publicaciones:
+            [
 
             ],
             lvl: 1,
             title: "Reacciones por Publicacion ",
+            pagina_id:0,
         }; 
 
         
@@ -274,40 +288,7 @@ export default class Content extends React.Component {
     componentWillMount() {
        
 
-      /*  var self = this;
-
-        // tickets por mes
-        api().get('tickets/month').then((response) => {
-            if(response.status === 200) {
-
-                self.setState({
-                    tickets_mes: response.data
-                });
-
-            }
-        });
-
-        // ultimos 10 tickets
-        api().get('tickets/?start=1&end=5').then((response) => {
-            if(response.status === 200) {
-
-                self.setState({
-                    last_10: response.data
-                });
-
-            }
-        });
-
-        // top clientes
-        api().get('tickets/top').then((response) => {
-            if(response.status === 200) {
-
-                self.setState({
-                    top_clientes: response.data
-                });
-
-            }
-        });*/
+    
 
     }
 
@@ -336,7 +317,22 @@ const style = {
                 />   
         </div>
         <div className="col-sm-4 ">
-           <p> holis</p>
+            <div className="row">
+                        <div className="col-md-6">
+                                                    <div className="form-group">
+                                                        <label className>Departamento:</label>
+                                                        <Select
+                                                            placeholder=""
+                                                            type="text"
+                                                            name="departamento_id"
+                                                            options={this.state.paginas}
+                                                            value={parseInt(this.state.pagina_id)}
+                                                            onChange={ this.handleChangeDepartamento} 
+                                                            clearable={false}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                </div>
         </div>
         <div className="col-sm-8 ">
              <ProspectsPer/>
