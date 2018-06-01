@@ -166,6 +166,7 @@ export default class Content extends React.Component {
             zoom : 13,
             paginas:{
                 pag_id : '', 
+                access_token : '',
             },
             pagina : [],
             mapconfig: {
@@ -266,44 +267,70 @@ export default class Content extends React.Component {
         this.handleSelectChange = this.handleSelectChange.bind(this);
     }
 
-    // componentDidMount() {
+    componentDidMount() {
 
-    //     let urlfb = 'https://graph.facebook.com/v3.0/me';
-    //     let token = 'EAACEdEose0cBAOsZAbl3jZCIRgV7mNR4Manz1oOE6zFZAABCQGD8AEhBcGC55KTscW7Rl5i53H0ESWKOth2NOyLJu3EhNh0qxXRYImevvPefn7QREvaXnfgj8g7jcttCvnOJQ3FX0y1ZCqZBHzEddsZCG8NDHXEr5vZBH1u9iGDAAnz4JjNfkT1086WUZC9ppLXhHZCeqJ5jt2QZDZD';
-    //     let consulta = '?fields=accounts%7Bname%2Caccess_token%7D&access_token=';
-    //     let paginas = [];
-    //     axios.get(urlfb+consulta+token)
-    //     .then(response => {
-    //          response.data.accounts.data.some(function(obj) {
+        let urlfb = 'https://graph.facebook.com/v3.0/me';
+        let token = 'EAACEdEose0cBAKqi9EZA1pZALeEJkRAbFZCZBksO1cqQE1DFd4T46I4Vv34OZB8ZBL2aAoyHkBum0cQk9PqXaLE8W5rIA9gVDVBN7zFTi4CMeuVlTuf5JmBYA3G1Ef0F8IQixUVZBpjtTGtFIKWZAzCdhNqcB9nARjx65jkgVZAkkySKGx0aMiGQyiSZAx9WDh6iBpikF8GFmEewZDZD';
+        let consulta = '?fields=accounts%7Bname%2Caccess_token%7D&access_token=';
+        let paginas = [];
+        axios.get(urlfb+consulta+token)
+        .then(response => {
+             response.data.accounts.data.some(function(obj) {
 
-    //                 console.log(obj)
-    //                 paginas.push({
+                    console.log(obj)
+                    paginas.push({
                         
-    //                     value : obj.id,
-    //                     label : obj.name,
-    //                     token : obj.access_token,
+                        value : obj.id,
+                        label : obj.name,
+                        token : obj.access_token,
 
 
-    //                 });
+                    });
                                      
-    //             });
+                });
 
-    //         });      
+            });   
+
+        this.setState({
+            pagina : paginas,
+        }); 
     
 
-    // }
+    }
 
     handleSelectChange(select, name) {
 
         const value = select === null ? null : select.value;
-
+        console.log(select)
         this.setState({
             paginas: {
                 ...this.state.paginas,
-                [name]: value
+                [name]: value,
+                ['access_token']  : select.token
             }
         });
         console.log(value)
+        let urlfb = 'https://graph.facebook.com/v3.0/me?fields=feed&access_token=';
+
+        axios.get(urlfb+select.token)
+        .then(response => {
+            console.log(response)
+             response.data.feed.data.some(function(obj) {
+
+                    console.log(obj)
+                    // paginas.push({
+                        
+                    //     value : obj.id,
+                    //     label : obj.name,
+                    //     token : obj.access_token,
+
+
+                    // });
+                                     
+                });
+
+            });
+
         switch(value){
             case "1":
                 this.setState({
@@ -397,12 +424,12 @@ export default class Content extends React.Component {
                         <div className="row">
                             <div className="col-md-12">
                                 <div className="form-group">
-                                    <label >Publicaciones:</label>
+                                    <label >Paginas:</label>
                                     <Select
                                         placeholder=""
                                         type="text"
                                         name="pag_id"
-                                        options={paginas}
+                                        options={this.state.pagina}
                                         value={this.state.paginas.pag_id}
                                         onChange={ (select) => { this.handleSelectChange(select, 'pag_id') } } 
                                         clearable={false}
