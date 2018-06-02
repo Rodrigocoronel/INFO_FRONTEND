@@ -36,13 +36,12 @@ import axios from 'axios';
 import ReactDOM from 'react-dom';
 import AmCharts from '@amcharts/amcharts3-react';
 
-import 'ammap3/ammap/ammap.js';
-import 'ammap3/ammap/maps/js/continentsLow.js';
-import 'ammap3/ammap/maps/js/san.js';
-import Mapa from'ammap3/ammap/maps/js/worldHigh.js';
+// import 'ammap3/ammap/ammap.js';
+// import 'ammap3/ammap/maps/js/continentsLow.js';
+// import 'ammap3/ammap/maps/js/san.js';
+// import Mapa from'ammap3/ammap/maps/js/worldHigh.js';
 
-const paginas=
-            [           
+const paginas=[           
             { value:"1",label:"Viancca Barreto"},
             { value:"2",label:"Celestino Salcedo Flores"},
             { value:"3",label:"Mario Madrigal"},
@@ -50,7 +49,8 @@ const paginas=
             { value:"5",label:"Erika Santana"},
             { value:"6",label:"Génesis Márquez Rubalcava"},
             { value:"7",label:"Lauro Aréstegui"}
-            ];
+];
+
 class ProspectsPer extends React.Component {
 
     constructor(props) {
@@ -120,7 +120,7 @@ class ProspectsPer extends React.Component {
    
 
     render() {
-            console.log(this.props.count)
+            // console.log(this.props.count)
         return(
             <CardGroup className="sales-card mb-4">
                 <Card style={{'flex': '3 0 0'}}>
@@ -166,6 +166,7 @@ export default class Content extends React.Component {
             long : -117.043863,
             lat : 32.493699,
             zoom : 13,
+            population: 0,
             paginas:{
                 pag_id : '', 
                 access_token : '',
@@ -175,7 +176,7 @@ export default class Content extends React.Component {
                 type: "map",
                 theme: "dark",
                 areasSettings: {
-                    autoZoom: false,                                   
+                    autoZoom: false,
                     alpha: 0.8,
                     unlistedAreasAlpha: 0.1,
                     rollOverColor: "#9a7bca"
@@ -273,7 +274,7 @@ export default class Content extends React.Component {
     componentDidMount() {
 
         let urlfb = 'https://graph.facebook.com/v3.0/me';
-        let token = 'EAACEdEose0cBAFBOTpPo8MqK4kpamOJOnUeIryRlEELxjAtN4YwPkr6Ju9NPCH0ZCXMoHRz9ZAZCAZCv80RhzlwWzQ54tlDueXEN2CiPo1xJaKz1S2anfrsLWAYBezgeLQMuDvUamL6pJ8YvSRmNgTVM6xzPqvZAbJl8ULbQMNtRfczdx953aZBvOmWlMFmE5TXxxapOZBzjgZDZD';
+        let token = 'EAACEdEose0cBAC3Wq17O5BGJpSVUzLDkPeh676KPnxmx3fzeC173kFVLG1Lkzn4Klrrqh3q8oGqIcC6ZA47XBYoT7vddklU4DoZC4yqb5QTg0WdfDQ3wKw1FFofOsxaJZCIuTsvzfz9tBUZCbmTXuKvxIyOweyBurgE2tVyQElI3JZCUG5piFKtUjWQqvVRwulIBUYPmEEAZDZD';
         let consulta = '?fields=accounts%7Bname%2Caccess_token%7D&access_token=';
         let paginas = [];
         axios.get(urlfb+consulta+token)
@@ -302,7 +303,7 @@ export default class Content extends React.Component {
     handleSelectChange(select, name) {
 
         const value = select === null ? null : select.value;
-        console.log(select)
+        // console.log(select)
         let publicaciones=[];
         let self = this;
         this.setState({
@@ -312,12 +313,12 @@ export default class Content extends React.Component {
                 ['access_token']  : select.token
             }
         });
-        console.log(value)
+        // console.log(value)
         let urlfb = 'https://graph.facebook.com/v3.0/me?fields=feed&access_token=';
 
         axios.get(urlfb+select.token)
         .then(response => {
-            console.log(response)
+            // console.log(response)
              response.data.feed.data.some(function(obj) {
                     publicaciones.push({
                         
@@ -339,65 +340,84 @@ export default class Content extends React.Component {
         
 
         switch(value){
-            case "1":
+
+            // bianca tijuana
+            case "1627463167374165":
                 this.setState({
                     lat : 32.493699,
                     long : -116.959654,
-                    zoom : 12,
+                    zoom : 10,
+                    population: 5000,
                 });
             break;
 
-            case "2":
+            case "1670414819732611":
                 this.setState({
                     lat : 32.619812,
                     long : -115.456473,
                     zoom : 12
                 });
-                console.log(this.state.lat)
-                console.log(this.state.long)
-            break; 
-            case "3":
+            break;
+
+            // madrigal
+            // 32.476312,-117.0614007,17
+            case "411052376013391":
                 this.setState({
-                    lat : 32.461746,
-                    long : -117.043863,
-                    zoom : 12
+                    lat : 32.476312,
+                    long : -117.0614007,
+                    zoom : 11,
+                    population: 3000,
+
                 });
             break;
 
-            case "4":
+            // adriana lopez
+            case "1277594875598974":
                 this.setState({
                     lat : 32.155425,
                     long : -116.133693,
-                    zoom : 8
+                    zoom : 8,
+                    population: 350000,
                 });
             break;
-            case '5':
+
+            // erika santan tijuana
+            case '496428537221963':
                 this.setState({
                     lat : 32.493699,
                     long : -116.959654,
-                    zoom : 12,
+                    zoom : 10,
+                    population: 5000,
                 });
 
             break;
 
-            case '6':
+
+            // genesis
+            case '351741994978553':
                 this.setState({
                     lat : 31.865930,
                     long : -116.597069,
-                    zoom : 13
+                    zoom : 13,
+                    population: 1500,
                 });
             break;
 
-            case '7':
+            // lauro
+            case '242601132597540':
                 this.setState({
                     lat : 32.619812,
                     long : -115.456473,
-                    zoom : 12
+                    zoom : 12,
+                    population: 3000,
                 });
             break;
         }
 
-
+        console.log("-->", value)
+        console.log("-->", this.state.lat)
+        console.log("-->", this.state.long)
+        console.log("-->", this.state.population)
 
     }
 
@@ -409,12 +429,12 @@ export default class Content extends React.Component {
         let query = "?fields=reactions.type(LIKE).limit(0).summary(total_count).as(LIKE)%2Creactions.type(LOVE).limit(0).summary(total_count).as(LOVE)%2Creactions.type(SAD).limit(0).summary(total_count).as(SAD)%2Creactions.type(WOW).limit(0).summary(total_count).as(WOW)%2Creactions.type(ANGRY).limit(0).summary(total_count).as(ANGRY)%2Creactions.type(HAHA).limit(0).summary(total_count).as(HAHA)";
         let url_fb = "https://graph.facebook.com/v3.0/"
         let access_token = "&access_token="+paginas.access_token;
-        console.log(idPublicacion)
-        console.log(index)
+        // console.log(idPublicacion)
+        // console.log(index)
         
         axios.get(url_fb+idPublicacion+query+access_token)
         .then(response => {
-            console.log(response.data.ANGRY.summary.total_count)
+            // console.log(response.data.ANGRY.summary.total_count)
             reacciones.push({
                 
                 angry : response.data.ANGRY.summary.total_count,
@@ -518,7 +538,7 @@ export default class Content extends React.Component {
                 <CardBlock>
                     <div className="row">
                         <div className="col-6">
-                            <Map lat={this.state.lat} long={this.state.long} zoom={this.state.zoom}/>
+                            <Map population={this.state.population} lat={this.state.lat} long={this.state.long} zoom={this.state.zoom}/>
                         </div>
 
                         <div className="col-6">

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-import './index.css';
+// import './index.css';
 
 // image from external URL
 // const myIcon ='https://i.imgur.com/wVAJS8Tr.png';
@@ -183,11 +183,24 @@ export default class Map extends Component {
 
   }
 
-  componentWillReceiveProps(props) {
+  componentWillReceiveProps(nextProps) {
+
+    let {lat, long, zoom} = this.props;
+
+    // if(this.props.lat == nextProps.lat) return;
+
+    console.log('proops actual', this.props);
+    console.log('next props', nextProps);
+
+    // if(  this.props.lat == nextProps.lat && nextProps.long == this.props.long   ) {
+    //   return;
+    // }
 
     map = new window.google.maps.Map(document.getElementById('map'), {
-      center: new window.google.maps.LatLng(32.493699, -117.043863,8),
-      zoom: props.zoom,
+      // center: new window.google.maps.LatLng(32.493699, -117.043863,8),
+      center: new window.google.maps.LatLng(lat, long),
+      // zoom: props.zoom,
+      zoom: zoom,
       mapTypeId: 'roadmap',
       styles: [
         {
@@ -509,9 +522,22 @@ export default class Map extends Component {
 
     // loop();
 
+    // for (var city in citymap) {
+    //       // Add the circle for this city to the map.
+    //       var cityCircle = new window.google.maps.Circle({
+    //         strokeColor: '#FF0000',
+    //         strokeOpacity: 0.8,
+    //         strokeWeight: 2,
+    //         fillColor: '#FF0000',
+    //         fillOpacity: 0.35,
+    //         map: map,
+    //         center: citymap[city].center,
+    //         // center: {lat: lat, lng: long},
+    //         radius: Math.sqrt(citymap[city].population) * 100
+    //       });
+    //     }
 
-    for (var city in citymap) {
-          // Add the circle for this city to the map.
+    // Add the circle for this city to the map.
           var cityCircle = new window.google.maps.Circle({
             strokeColor: '#FF0000',
             strokeOpacity: 0.8,
@@ -519,10 +545,10 @@ export default class Map extends Component {
             fillColor: '#FF0000',
             fillOpacity: 0.35,
             map: map,
-            center: citymap[city].center,
-            radius: Math.sqrt(citymap[city].population) * 100
+            // center: citymap[city].center,
+            center: {lat: lat, lng: long},
+            radius: Math.sqrt(nextProps.population) * 100
           });
-        }
     
     // Overlay view allows you to organize your markers in the DOM
     // https://developers.google.com/maps/documentation/javascript/reference#OverlayView
