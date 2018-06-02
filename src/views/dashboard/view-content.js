@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+ import React, { Component } from 'react';
 import {
     AreaChart, Area,
     PieChart, Pie,
@@ -120,7 +120,7 @@ class ProspectsPer extends React.Component {
    
 
     render() {
-
+            console.log(this.props.count)
         return(
             <CardGroup className="sales-card mb-4">
                 <Card style={{'flex': '3 0 0'}}>
@@ -129,19 +129,19 @@ class ProspectsPer extends React.Component {
                         <div className="small mb-4 card-subtitle"></div>
                         <div style={{width: '100%', height: '280px'}}>
                             <ResponsiveContainer>
-                                <BarChart width={730} height={250} data={this.state.data}>
+                                <BarChart width={730} height={250} data={this.props.count}>
                                   <CartesianGrid strokeDasharray="3 3" />
                                   <XAxis dataKey="name" />
                                   <YAxis />                                  
                                   <Tooltip/>                            
                                    
                                   <Legend />
-                                  <Bar dataKey="Me Gusta" fill='#0A22E0'  minPointSize={1} />
-                                   <Bar dataKey="Me Encanta" fill='#E00AB8'  minPointSize={1} />
-                                    <Bar dataKey="Me Enoja" fill='#E00A0A'  minPointSize={1} />
-                                   <Bar dataKey="Me Entristece" fill='#E0850A'  minPointSize={1} />
-                                    <Bar dataKey="Me Divierte" fill='#E0E00A'  minPointSize={1} />
-                                   <Bar dataKey="Me Asombra" fill='#31E00A'  minPointSize={1} />
+                                  <Bar dataKey="like" fill='#0A22E0'  minPointSize={1} />
+                                   <Bar dataKey="haha" fill='#E00AB8'  minPointSize={1} />
+                                    <Bar dataKey="angry" fill='#E00A0A'  minPointSize={1} />
+                                   <Bar dataKey="love" fill='#E0850A'  minPointSize={1} />
+                                    <Bar dataKey="wow" fill='#E0E00A'  minPointSize={1} />
+                                   <Bar dataKey="sad" fill='#31E00A'  minPointSize={1} />
                                    
                                 </BarChart>
                             </ResponsiveContainer>
@@ -161,6 +161,8 @@ export default class Content extends React.Component {
         super(props);
 
         this.state = {
+            reacciones : [],
+            publicaciones : [],
             long : -117.043863,
             lat : 32.493699,
             zoom : 13,
@@ -265,19 +267,18 @@ export default class Content extends React.Component {
         
         };//fin del state
         this.handleSelectChange = this.handleSelectChange.bind(this);
+        this.publicaciones = this.publicaciones.bind(this);
     }
 
     componentDidMount() {
 
         let urlfb = 'https://graph.facebook.com/v3.0/me';
-        let token = 'EAACEdEose0cBAKqi9EZA1pZALeEJkRAbFZCZBksO1cqQE1DFd4T46I4Vv34OZB8ZBL2aAoyHkBum0cQk9PqXaLE8W5rIA9gVDVBN7zFTi4CMeuVlTuf5JmBYA3G1Ef0F8IQixUVZBpjtTGtFIKWZAzCdhNqcB9nARjx65jkgVZAkkySKGx0aMiGQyiSZAx9WDh6iBpikF8GFmEewZDZD';
+        let token = 'EAACEdEose0cBAFBOTpPo8MqK4kpamOJOnUeIryRlEELxjAtN4YwPkr6Ju9NPCH0ZCXMoHRz9ZAZCAZCv80RhzlwWzQ54tlDueXEN2CiPo1xJaKz1S2anfrsLWAYBezgeLQMuDvUamL6pJ8YvSRmNgTVM6xzPqvZAbJl8ULbQMNtRfczdx953aZBvOmWlMFmE5TXxxapOZBzjgZDZD';
         let consulta = '?fields=accounts%7Bname%2Caccess_token%7D&access_token=';
         let paginas = [];
         axios.get(urlfb+consulta+token)
         .then(response => {
              response.data.accounts.data.some(function(obj) {
-
-                    console.log(obj)
                     paginas.push({
                         
                         value : obj.id,
@@ -302,6 +303,8 @@ export default class Content extends React.Component {
 
         const value = select === null ? null : select.value;
         console.log(select)
+        let publicaciones=[];
+        let self = this;
         this.setState({
             paginas: {
                 ...this.state.paginas,
@@ -316,20 +319,24 @@ export default class Content extends React.Component {
         .then(response => {
             console.log(response)
              response.data.feed.data.some(function(obj) {
-
-                    console.log(obj)
-                    // paginas.push({
+                    publicaciones.push({
                         
-                    //     value : obj.id,
-                    //     label : obj.name,
-                    //     token : obj.access_token,
+                        value : obj.id,
+                        label : obj.message,
+                        token : obj.access_token,
 
 
-                    // });
+                    });
+
+                    self.setState({
+                        publicaciones : publicaciones,
+                    }); 
                                      
                 });
 
+
             });
+        
 
         switch(value){
             case "1":
@@ -394,6 +401,43 @@ export default class Content extends React.Component {
 
     }
 
+    publicaciones(evt, idPublicacion , index){
+        evt.preventDefault();
+        let {paginas} = this.state;
+        let reacciones = [];
+        let self = this;
+        let query = "?fields=reactions.type(LIKE).limit(0).summary(total_count).as(LIKE)%2Creactions.type(LOVE).limit(0).summary(total_count).as(LOVE)%2Creactions.type(SAD).limit(0).summary(total_count).as(SAD)%2Creactions.type(WOW).limit(0).summary(total_count).as(WOW)%2Creactions.type(ANGRY).limit(0).summary(total_count).as(ANGRY)%2Creactions.type(HAHA).limit(0).summary(total_count).as(HAHA)";
+        let url_fb = "https://graph.facebook.com/v3.0/"
+        let access_token = "&access_token="+paginas.access_token;
+        console.log(idPublicacion)
+        console.log(index)
+        
+        axios.get(url_fb+idPublicacion+query+access_token)
+        .then(response => {
+            console.log(response.data.ANGRY.summary.total_count)
+            reacciones.push({
+                
+                angry : response.data.ANGRY.summary.total_count,
+                haha : response.data.HAHA.summary.total_count,
+                love : response.data.LOVE.summary.total_count,
+                like : response.data.LIKE.summary.total_count,
+                sad : response.data.SAD.summary.total_count,
+                wow : response.data.WOW.summary.total_count,
+
+
+            });
+
+            self.setState({
+                reacciones : reacciones,
+            }); 
+                                     
+            
+
+
+            });
+
+    }
+
 // <div className="col-sm-8 fondo_oscuro_mapa">
 //                         <AmCharts.React
 //                                 ref="reactmap"
@@ -406,9 +450,6 @@ export default class Content extends React.Component {
           width: '600px',
           height: '400px'
         };
-        console.log('nuevas')
-        console.log(this.state.lat)
-        console.log(this.state.long)
 
         return(
             <div className="view ">
@@ -420,73 +461,75 @@ export default class Content extends React.Component {
                 <div className="view-content view-components mt-4 ">         
                    
                 <div className="row">
-                    <div className="col-sm-4 ">
-                        <div className="row">
-                            <div className="col-md-12">
-                                <div className="form-group">
-                                    <label >Paginas:</label>
-                                    <Select
-                                        placeholder=""
-                                        type="text"
-                                        name="pag_id"
-                                        options={this.state.pagina}
-                                        value={this.state.paginas.pag_id}
-                                        onChange={ (select) => { this.handleSelectChange(select, 'pag_id') } } 
-                                        clearable={false}
-                                    />
-                                    <br/><br/>
-                                    <ReactTable
-                                      data      = {[]}
-                                      className = "-striped -highlight"
-                                      columns   = {[
-                                       
-                                        {Header: 'Publicacion', accessor: 'label' , maxWidth: 220},
-                                        {
-                                            Header: 'Controles',
-                                            filterable: false,
-                                            sortable: false,
-                                            maxWidth: 80,
-                                            Cell: (row) =>
-                                            {
-                                                return(
-                                                    <div className="text-right">
-                                                        <Button
-                                                         color="success" 
-                                                         className="btn-sm" 
-                                                         onClick={(evt)=>this.toggle(evt, row.original.value, 'Editar Cliente')}>
-                                                            <IconEdit />
-                                                        </Button>{' '}
-                                                         
-                                                    </div>
-                                                )
-                                            }
-                                        }
-                                      
-                                      ]}
-                                      filterable 
-                                      defaultPageSize={5}
-                                      pageSizeOptions={[5]}
-                                    />
-                                </div>
+                    <div className="col-md-4">
+                        <div className="form-group">
+                            <label >Paginas:</label>
+                            <Select
+                                placeholder=""
+                                type="text"
+                                name="pag_id"
+                                options={this.state.pagina}
+                                value={this.state.paginas.pag_id}
+                                onChange={ (select) => { this.handleSelectChange(select, 'pag_id') } } 
+                                clearable={false}
+                            />
+                            <br/><br/>
+                        </div>
+                    </div>
+                    <div className="col-md-8">
+                    <ReactTable
+                              data      = {this.state.publicaciones}
+                              className = "-striped -highlight"
+                              columns   = {[
+                               
+                                {Header: 'Publicacion', accessor: 'label' },
+                                {
+                                    Header: 'Controles',
+                                    filterable: false,
+                                    sortable: false,
+                                   
+                                    Cell: (row) =>
+                                    {
+                                        return(
+                                            <div className="text-right">
+                                                <Button
+                                                 color="success" 
+                                                 className="btn-sm" 
+                                                 onClick={(evt)=>this.publicaciones(evt, row.original.value,row.index)}>
+                                                    <IconEdit />
+                                                </Button>{' '}
+                                                 
+                                            </div>
+                                        )
+                                    }
+                                }
+                              
+                              ]}
+                              filterable 
+                              defaultPageSize={5}
+                              pageSizeOptions={[5]}
+                            />
+                    </div>
+                </div>
+                <br/><br/>
+
+            </div>
+            <Card>
+                <CardBlock>
+                    <div className="row">
+                        <div className="col-6">
+                            <Map lat={this.state.lat} long={this.state.long} zoom={this.state.zoom}/>
+                        </div>
+
+                        <div className="col-6">
+                            <div className="push-right">
+                            <br/>
+                                <ProspectsPer count={this.state.reacciones}/>
                             </div>
                         </div>
                     </div>
-                    <div className="col-sm-8">
-                        <Map lat={this.state.lat} long={this.state.long} zoom={this.state.zoom}/>
-                    </div>
-                     
-                </div>
-                <br/><br/>
-                <div className="row">
-                    <div className="col-4"></div>
-
-                    <div className="col-8">
-                        <div className="push-right">
-                            <ProspectsPer/>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                </CardBlock>
+            </Card>
         </div>
         )
     }

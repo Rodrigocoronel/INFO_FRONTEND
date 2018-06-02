@@ -39,6 +39,29 @@ const catIcon = () => {
   }
 }
 
+const citymap = {
+        chicago: {
+          center: {lat: 41.878, lng: -87.629},
+          population: 2714
+        },
+        newyork: {
+          center: {lat: 40.714, lng: -74.005},
+          population: 8405837
+        },
+        losangeles: {
+          center: {lat: 34.052, lng: -118.243},
+          population: 385777
+        },
+        vancouver: {
+          center: {lat: 49.25, lng: -123.1},
+          population: 603502
+        },
+        ensenada : {
+          center : {lat: 31.853613, lng :-116.600549},
+          population : 2000
+        }
+      }
+
 const RandomPoints = [
   { 'Lat': 31.8771006, 'Lng': -116.5801549 },
   { 'Lat': 31.85863726, 'Lng': -116.6232358 },
@@ -163,7 +186,7 @@ export default class Map extends Component {
   componentWillReceiveProps(props) {
 
     map = new window.google.maps.Map(document.getElementById('map'), {
-      center: new window.google.maps.LatLng(props.lat, props.long,13),
+      center: new window.google.maps.LatLng(32.493699, -117.043863,8),
       zoom: props.zoom,
       mapTypeId: 'roadmap',
       styles: [
@@ -404,88 +427,102 @@ export default class Map extends Component {
     // }
 
     // primero generamos al random cuantas acciones
-    let randomActions = Math.floor((Math.random() * 20) + 10);
+    // let randomActions = Math.floor((Math.random() * 20) + 10);
 
-    for (let i = randomActions - 1; i >= 0; i--) {
+    // for (let i = randomActions - 1; i >= 0; i--) {
       
-      let RandomPoint = (Math.floor((Math.random() * 20) + 1)) - 1;
-      let duration = (Math.floor((Math.random() * 7) + 3));
+    //   let RandomPoint = (Math.floor((Math.random() * 20) + 1)) - 1;
+    //   let duration = (Math.floor((Math.random() * 7) + 3));
 
-      markers.push({
-        ...RandomPoints[RandomPoint],
-        duration: duration,
-        obj: null,
-      });
+    //   markers.push({
+    //     ...RandomPoints[RandomPoint],
+    //     duration: duration,
+    //     obj: null,
+    //   });
 
-    }
+    // }
 
     // pintamos las acciones
-    for (let i = markers.length - 1; i >= 0; i--) {
+    // for (let i = markers.length - 1; i >= 0; i--) {
 
-      let tmp = markers[i];
+    //   let tmp = markers[i];
 
-      tmp.duration -= 1;
+    //   tmp.duration -= 1;
 
-      let latLng = new window.google.maps.LatLng(tmp.Lat, tmp.Lng);
+    //   let latLng = new window.google.maps.LatLng(tmp.Lat, tmp.Lng);
 
-      tmp.obj = new window.google.maps.Marker({
-        position:latLng,
-        map: map,
-        // set the icon as catIcon declared above
-        icon: catIcon(),
-        // must use optimized false for CSS
-        optimized: false,
-        title: ':p'
-      });
+    //   tmp.obj = new window.google.maps.Marker({
+    //     position:latLng,
+    //     map: map,
+    //     // set the icon as catIcon declared above
+    //     icon: catIcon(),
+    //     // must use optimized false for CSS
+    //     optimized: false,
+    //     title: ':p'
+    //   });
 
-    }
+    // }
 
     // animations
-    let loop = function() {
-      setTimeout(() => {
+    // let loop = function() {
+    //   setTimeout(() => {
 
     
-        for (var i = markers.length - 1; i >= 0; i--) {
-          let tmp = markers[i];
+    //     for (var i = markers.length - 1; i >= 0; i--) {
+    //       let tmp = markers[i];
 
-          tmp.duration -= 1;
+    //       tmp.duration -= 1;
 
-          if(tmp.duration < 0) {
-            markers[i].obj.setMap(null);
-            markers.splice(i, 1);
+    //       if(tmp.duration < 0) {
+    //         markers[i].obj.setMap(null);
+    //         markers.splice(i, 1);
 
-            // add new actions
-            let RandomPoint = (Math.floor((Math.random() * 20) + 1)) - 1;
-            let duration = (Math.floor((Math.random() * 7) + 3));
-            let latLng = new window.google.maps.LatLng(RandomPoints[RandomPoint].Lat, RandomPoints[RandomPoint].Lng);
+    //         // add new actions
+    //         let RandomPoint = (Math.floor((Math.random() * 20) + 1)) - 1;
+    //         let duration = (Math.floor((Math.random() * 7) + 3));
+    //         let latLng = new window.google.maps.LatLng(RandomPoints[RandomPoint].Lat, RandomPoints[RandomPoint].Lng);
 
-            markers.push({
-              ...RandomPoints[RandomPoint],
-              duration: duration,
-              obj: new window.google.maps.Marker({
-                position:latLng,
-                map: map,
-                // set the icon as catIcon declared above
-                icon: catIcon(),
-                // must use optimized false for CSS
-                optimized: false,
-                title: ':p'
-              }),
-            });
-            //
+    //         markers.push({
+    //           ...RandomPoints[RandomPoint],
+    //           duration: duration,
+    //           obj: new window.google.maps.Marker({
+    //             position:latLng,
+    //             map: map,
+    //             // set the icon as catIcon declared above
+    //             icon: catIcon(),
+    //             // must use optimized false for CSS
+    //             optimized: false,
+    //             title: ':p'
+    //           }),
+    //         });
+    //         //
 
-          }
+    //       }
 
+    //     }
+
+
+    //     loop();
+    //   }, 1000*4);
+    // };
+
+
+    // loop();
+
+
+    for (var city in citymap) {
+          // Add the circle for this city to the map.
+          var cityCircle = new window.google.maps.Circle({
+            strokeColor: '#FF0000',
+            strokeOpacity: 0.8,
+            strokeWeight: 2,
+            fillColor: '#FF0000',
+            fillOpacity: 0.35,
+            map: map,
+            center: citymap[city].center,
+            radius: Math.sqrt(citymap[city].population) * 100
+          });
         }
-
-
-        loop();
-      }, 1000*4);
-    };
-
-
-    loop();
-
     
     // Overlay view allows you to organize your markers in the DOM
     // https://developers.google.com/maps/documentation/javascript/reference#OverlayView
@@ -501,7 +538,7 @@ export default class Map extends Component {
 
   render() {
     return (
-      <div style={{ height: '500px', width: '100%' }}>
+      <div style={{ height: '400px', width: '100%' }}>
         <div style={{ height: '100%', width: '100%' }} id="map"></div>
       </div>
       )
