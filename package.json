@@ -19,6 +19,7 @@
 		"react-datepicker": "^0.64.0",
 		"react-dom": "^16.0.0",
 		"react-draft-wysiwyg": "1.10.4",
+		"react-facebook-login": "^4.0.1",
 		"react-icons": "2.2.5",
 		"react-moment": "^0.6.8",
 		"react-motion": "0.5.2",

@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from "react-router-dom";
+import {Button} from 'reactstrap';
 
 import * as actions from '../../actions/auth';
+import FacebookLogin from 'react-facebook-login';
 
 import loginbackground from '../../images/check.png';
 
@@ -19,6 +21,7 @@ class SignIn extends React.Component {
 
 		this._submit = this._submit.bind(this);
 		this.handleInputChange = this.handleInputChange.bind(this);
+		this.responseFacebook = this.responseFacebook.bind(this);
 	}
 
     componentDidMount()
@@ -36,6 +39,13 @@ class SignIn extends React.Component {
 		this.props.signin(email,password);
 
 	}
+
+
+	responseFacebook(evt){
+		console.log(evt)
+	}
+	  
+	
 
 	handleInputChange(event) {
         const target    = event.target;
@@ -66,6 +76,12 @@ class SignIn extends React.Component {
 								<button className="btn-maxicomm" type="submit">SIGN IN</button>
 							</form>
 						</div>
+						<FacebookLogin
+						    appId="1543242095975382"
+						    autoLoad={true}
+						    fields="name,email,picture"
+						    scope="manage_pages"
+						    callback={this.responseFacebook} />
 					</div>
 					<div style={styles.rightside}></div>
 				</div>
