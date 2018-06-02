@@ -162,6 +162,7 @@ export default class Content extends React.Component {
 
         this.state = {
             reacciones : [],
+            page: '',
             publicaciones : [],
             long : -117.043863,
             lat : 32.493699,
@@ -274,7 +275,7 @@ export default class Content extends React.Component {
     componentDidMount() {
 
         let urlfb = 'https://graph.facebook.com/v3.0/me';
-        let token = 'EAACEdEose0cBAC3Wq17O5BGJpSVUzLDkPeh676KPnxmx3fzeC173kFVLG1Lkzn4Klrrqh3q8oGqIcC6ZA47XBYoT7vddklU4DoZC4yqb5QTg0WdfDQ3wKw1FFofOsxaJZCIuTsvzfz9tBUZCbmTXuKvxIyOweyBurgE2tVyQElI3JZCUG5piFKtUjWQqvVRwulIBUYPmEEAZDZD';
+        let token = 'EAACEdEose0cBAJIN0ZBf2VGslW0OlJ9Xuj0uPLV6ZADZAM9WxCCaxczxJjVrWtUnSwvYdq0RUCMOERk3jUrwvbqwXSf8OSyNTe4ld3Ho8Qkz8eZCHRdmMWQ9kITWZBZCxWYImBfBflw3juZAqRnT0ny5TZBlKrWxE3R5blOYQ8D3fKENaqeRpAOFjxnnWV86cJlcBfxT06DfAQZDZD';
         let consulta = '?fields=accounts%7Bname%2Caccess_token%7D&access_token=';
         let paginas = [];
         axios.get(urlfb+consulta+token)
@@ -339,85 +340,86 @@ export default class Content extends React.Component {
             });
         
 
-        switch(value){
+        this.setState({'page': value});
+
+        // switch(value){
 
             // bianca tijuana
-            case "1627463167374165":
-                this.setState({
-                    lat : 32.493699,
-                    long : -116.959654,
-                    zoom : 10,
-                    population: 5000,
-                });
-            break;
+            // case "1627463167374165":
+            //     this.setState({
+            //         lat : 32.493699,
+            //         long : -116.959654,
+            //         zoom : 10,
+            //         population: 5000,
+            //     });
+            // break;
 
-            case "1670414819732611":
-                this.setState({
-                    lat : 32.619812,
-                    long : -115.456473,
-                    zoom : 12
-                });
-            break;
+            // case "1670414819732611":
+            //     this.setState({
+            //         lat : 32.619812,
+            //         long : -115.456473,
+            //         zoom : 12
+            //     });
+            // break;
 
             // madrigal
             // 32.476312,-117.0614007,17
-            case "411052376013391":
-                this.setState({
-                    lat : 32.476312,
-                    long : -117.0614007,
-                    zoom : 11,
-                    population: 3000,
+            // case "411052376013391":
+            //     this.setState({
+            //         lat : 32.476312,
+            //         long : -117.0614007,
+            //         zoom : 11,
+            //         population: 3000,
 
-                });
-            break;
+            //     });
+            // break;
 
             // adriana lopez
-            case "1277594875598974":
-                this.setState({
-                    lat : 32.155425,
-                    long : -116.133693,
-                    zoom : 8,
-                    population: 350000,
-                });
-            break;
+            // case "1277594875598974":
+            //     this.setState({
+            //         lat : 32.155425,
+            //         long : -116.133693,
+            //         zoom : 8,
+            //         population: 350000,
+            //     });
+            // break;
 
             // erika santan tijuana
-            case '496428537221963':
-                this.setState({
-                    lat : 32.493699,
-                    long : -116.959654,
-                    zoom : 10,
-                    population: 5000,
-                });
+            // case '496428537221963':
+            //     this.setState({
+            //         lat : 32.493699,
+            //         long : -116.959654,
+            //         zoom : 10,
+            //         population: 5000,
+            //     });
 
-            break;
-
+            // break;
 
             // genesis
-            case '351741994978553':
-                this.setState({
-                    lat : 31.865930,
-                    long : -116.597069,
-                    zoom : 13,
-                    population: 1500,
-                });
-            break;
+            // case '351741994978553':
+            //     this.setState({
+            //         lat : 31.865930,
+            //         long : -116.597069,
+            //         zoom : 13,
+            //         population: 1500,
+            //     });
+            // break;
 
             // lauro
-            case '242601132597540':
-                this.setState({
-                    lat : 32.619812,
-                    long : -115.456473,
-                    zoom : 12,
-                    population: 3000,
-                });
-            break;
-        }
+            // case '242601132597540':
+            //     this.setState({
+            //         lat : 32.619812,
+            //         long : -115.456473,
+            //         zoom : 12,
+            //         population: 3000,
+            //     });
+            // break;
+        // }
 
-        console.log("-->", value)
-        console.log("-->", this.state.lat)
-        console.log("-->", this.state.long)
-        console.log("-->", this.state.population)
+        // console.log("-->", value)
+        // console.log("-->", this.state.lat)
+        // console.log("-->", this.state.long)
+        // console.log("-->", this.state.population)
 
     }
 
@@ -466,10 +468,13 @@ export default class Content extends React.Component {
 //                             />   
 //                     </div>
     render() {
+
         const style = {
           width: '600px',
           height: '400px'
         };
+
+        console.log(this.state.page);
 
         return(
             <div className="view ">
@@ -538,7 +543,7 @@ export default class Content extends React.Component {
                 <CardBlock>
                     <div className="row">
                         <div className="col-6">
-                            <Map population={this.state.population} lat={this.state.lat} long={this.state.long} zoom={this.state.zoom}/>
+                            <Map page={this.state.page} />
                         </div>
 
                         <div className="col-6">
