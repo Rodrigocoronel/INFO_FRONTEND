@@ -21,7 +21,7 @@ class App extends React.Component {
         super(props);
 
         this.state = {
-            navMini : false,
+            navMini : true,
         }
 
         this.handleClick = this.handleClick.bind(this);
@@ -63,16 +63,11 @@ class App extends React.Component {
             <HashRouter basename='app'>
                 <div className="app-wrapper">
 
-                    <Nav mini={navMini} toggleNav={this.toggleNav} />
+                    
 
                     <div className={`content-container ${navMini ? 'full' : ''}`}>
-                       
-                        <div 
-                         className="menu-dropshadow" 
-                         style={{display: (navMini ? 'block': 'none')}} 
-                         onClick={this.hideNav}></div>
                         
-                        <SiteHead toggleNav={this.toggleNav} onClick={this.handleClick} user={user} />
+                        <SiteHead  onClick={this.handleClick} user={user} />
 
                         <Switch>
                             <Route exact path="/" component={Dashboard} />

@@ -20,9 +20,7 @@ import profile from  './profile.jpg';
 
 export default (props) => (
     <header className="site-head d-flex align-items-center justify-content-between">
-        <div className="wrap mr-4">
-            <IconMenu size="24" color="#fff" onClick={props.toggleNav} style={{cursor: 'pointer'}}/>
-        </div>
+        
         <div className="right-elems ml-auto d-flex">
             <div className="wrap hidden-sm-down">
                 <IconFullScreen size="22" color="#fff" onClick={() => screenfull.toggle()}/>
